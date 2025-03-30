@@ -1,6 +1,7 @@
 package com.test.nimap.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -22,8 +23,9 @@ public class products {
 	private  double price;
 	
 	@ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-	@JoinColumn(name = "category_id",referencedColumnName = "cid")
+	@JoinColumn(name = "category_id",referencedColumnName = "cid",nullable = false)
 	@JsonIgnore
+	@JsonProperty("category")
 	private categories category;
 
 }

@@ -22,4 +22,11 @@ public class CategoriesServicesImpl implements CategoryServices{
 		return getallcategories;
 	}
 
+
+	@Override
+	public categories viewpbyid(int id) {
+		
+		return catrepo.findById(id).orElseThrow(() -> new RuntimeException(" categories not found with ID: " + id));
+	}
+
 }

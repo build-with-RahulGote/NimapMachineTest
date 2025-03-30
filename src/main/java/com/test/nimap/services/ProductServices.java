@@ -10,5 +10,6 @@ public interface ProductServices {
 	
 	
 	public Page<products> getAllProducts(int offset,int pagesize);
+	products viewpbyid(int id);
 
 }

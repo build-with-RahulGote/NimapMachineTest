@@ -9,5 +9,6 @@ import com.test.nimap.models.categories;
 public interface CategoryServices {
 	
 	 Page<categories> getAllCategories(int offset,int pagesize);
+	 categories viewpbyid(int id);
 
 }
