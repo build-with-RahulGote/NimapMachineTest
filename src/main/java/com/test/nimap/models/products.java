@@ -1,9 +1,5 @@
 package com.test.nimap.models;
 
-import java.util.List;
-
-import org.hibernate.annotations.ManyToAny;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -26,8 +22,8 @@ public class products {
 	private  double price;
 	
 	@ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-	@JoinColumn(name = "category_id")
+	@JoinColumn(name = "category_id",referencedColumnName = "cid")
 	@JsonIgnore
-	private categories categori;
+	private categories category;
 
 }
