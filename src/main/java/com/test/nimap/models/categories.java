@@ -2,6 +2,9 @@ package com.test.nimap.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,6 +24,7 @@ public class categories {
 	private  String cname;
 	
 	@OneToMany(mappedBy = "category",cascade = CascadeType.ALL)
+	  @JsonIgnore
 	private List<products>product;
 	
 

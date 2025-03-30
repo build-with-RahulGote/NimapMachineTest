@@ -11,5 +11,7 @@ public interface ProductServices {
 	
 	public Page<products> getAllProducts(int offset,int pagesize);
 	products viewpbyid(int id);
+	products updateproduct(int id,products prod);
+	public boolean DelProdById(int pid);
 
 }
