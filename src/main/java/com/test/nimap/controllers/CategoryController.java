@@ -13,26 +13,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.test.nimap.models.categories;
+import com.test.nimap.models.Categories;
 
 import com.test.nimap.services.CategoryServices;
 
-@RestController
-@RequestMapping("/api/categories")
+@RestController //set as Controller
+@RequestMapping("/api/categories")//API mapping
 public class CategoryController {
 	@Autowired
 	public CategoryServices catservice;
 	
+	
+	//Find All Categories with Pagination
 	@GetMapping
-	public ResponseEntity<Page<categories>>getAllCategories(@RequestParam(defaultValue = "0")int page,@RequestParam(defaultValue = "10")int size)
+	public ResponseEntity<Page<Categories>>getAllCategories(@RequestParam(defaultValue = "0")int page,@RequestParam(defaultValue = "5")int size)
 	{
-		Page<categories>getcat=catservice.getAllCategories(page, size);
+		Page<Categories>getcat=catservice.getAllCategories(page, size);
 		return ResponseEntity.ok(getcat);
 		
 	}
 	
+	//Add New Category
 	@PostMapping
-	public String AddCategory(@RequestBody categories c) {
+	public String AddCategory(@RequestBody Categories c) {
 			
 		boolean b =catservice.saveCat(c);
 		if(b) {
@@ -43,17 +46,17 @@ public class CategoryController {
 		}
 	}
 	
-	
+	//Find Category By Id
 	@GetMapping("/{id}")
-	public ResponseEntity<categories>getProductById(@PathVariable int id) {
-		categories c1=catservice.viewpbyid(id);
+	public ResponseEntity<Categories>getCategoriesById(@PathVariable int id) {
+		Categories c1=catservice.viewcbyid(id);
 		return ResponseEntity.ok(c1);
 	}
 	
 	
-	
+	//update Category By id
 	@PutMapping("/{id}")
-	public ResponseEntity<String>updateCatgoery(@PathVariable int id,@RequestBody categories updatecat)
+	public ResponseEntity<String>updateCatgoery(@PathVariable int id,@RequestBody Categories updatecat)
 	{
 		boolean update=catservice.updateCategory(id, updatecat);
 		if(update)
@@ -66,9 +69,9 @@ public class CategoryController {
 		}
 	}
 	
-	
+	//Delete Category By id
 	@DeleteMapping(value = "/{id}")
-	public String delbyid(@PathVariable int id) {
+	public String deleteCatById(@PathVariable int id) {
 		boolean b = catservice.delcatbyid(id);
 		if (b) {
 			return "Record deleted";

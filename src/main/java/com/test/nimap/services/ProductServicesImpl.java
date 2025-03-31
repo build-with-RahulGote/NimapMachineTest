@@ -1,9 +1,5 @@
 package com.test.nimap.services;
 
-
-
-
-
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,76 +7,96 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.test.nimap.models.products;
+import com.test.nimap.models.Categories;
+import com.test.nimap.models.Products;
 
 import com.test.nimap.repository.ProductRepository;
+
 @Service
-public class ProductServicesImpl implements ProductServices{
+public class ProductServicesImpl implements ProductServices {
 
 	@Autowired
-	private ProductRepository prepo;
-	
-	
+	private ProductRepository prepo;  
 
+	@Autowired
+	CategoryServices categoryServices;  //category service object
+
+	//find all products with pagination
 	@Override
-	public Page<products> getAllProducts(int offset, int pagesize) {
-		
-		Page<products>products= prepo.findAll(PageRequest.of(offset, pagesize));
+	//provide page and page size
+	public Page<Products> getAllProducts(int offset, int pagesize) {
+
+		Page<Products> products = prepo.findAll(PageRequest.of(offset, pagesize));
 		return products;
 	}
 
-
-
+	//get product by id
 	@Override
-	public products viewpbyid(int id) {
-		
-		Optional<products>optional=prepo.findById(id);
-		if(optional.isPresent())
-		{
+	public Products viewpbyid(int id) {
+
+		Optional<Products> optional = prepo.findById(id);
+		if (optional.isPresent()) {
+
+//			products product = optional.get();
+//			product.setCategoryName(product.getCategory().getCname());
 			return optional.get();
-		}
-		else
-		{
+		} else {
 			return null;
 		}
 	}
 
-
-
+	//update product by id
 	@Override
-	public products updateproduct(int id, products prod) {
-		
-		return prepo.findById(id).map(productfound->{
-			productfound.setPname(prod.getPname());
-			productfound.setPrice(prod.getPrice());
-			productfound.setCategory(prod.getCategory());
-			return prepo.save(productfound);
+	public Products updateproduct(int id, Products prod) {
+		Optional<Products>opprod=prepo.findById(id);
+		if(opprod.isPresent())
+		{
+			Products cat=opprod.get();
+			cat.setPname(prod.getPname());
+			cat.setPrice(prod.getPrice());
 			
-		}).orElseThrow(()->new RuntimeException("Product not found with Id:"+id));
+			int newcid=prod.getCategory().getCid();
+			Categories categories=categoryServices.viewcbyid(newcid);
+			if(categories!=null)
+			{
+				cat.setCategory(categories);
+			}
+			prepo.save(cat);
+			return cat;
+		}
+	
+		return null;
+
+		
 	}
 
-
-
+	//delete product by id
 	@Override
 	public boolean DelProdById(int pid) {
-		Optional<products> oc = prepo.findById(pid);
-		if(oc.isPresent()) {
-		prepo.deleteById(pid);
-		return true;
-		}
-		else 
-		{
-		    
-		
-		return false;
+		Optional<Products> oc = prepo.findById(pid);
+		if (oc.isPresent()) {
+			prepo.deleteById(pid);
+			return true;
+		} else {
+
+			return false;
 		}
 	}
 
-	
-	
-		
-	
-	
+	@Override
+	public Products savepro(Products p) {
 
-	
+		int categoryId = p.getCategory().getCid();
+		Categories categorie = categoryServices.viewcbyid(categoryId);
+
+		if (categorie == null)
+			return null;
+
+		p.setCategory(categorie);
+
+		Products sp = prepo.save(p);
+		return sp ;
+
+	}
+
 }
