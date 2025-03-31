@@ -59,12 +59,12 @@ public class ProductsController {
 	}
 
 	//Delete product By id
-	@DeleteMapping("/{cid}")
-	public String DelProdById(@PathVariable int cid) {
+	@DeleteMapping("/{id}")
+	public String DelProdById(@PathVariable int id) {
 
-		boolean b = pservice.DelProdById(cid);
+		boolean b = pservice.DelProdById(id);
 		if (b) {
-			return "Record \t" + cid + "\tdeleted Successfully.";
+			return "Record \t" + id + "\tdeleted Successfully.";
 		} else {
 			return "Some Problem is there...";
 		}

@@ -2,17 +2,19 @@ package com.test.nimap.services;
 
 import org.springframework.data.domain.Page;
 
-import com.test.nimap.models.Categories;
-
+import com.test.nimap.models.categories;
 
 //interface for category service 
 public interface CategoryServices {
-	
-	 Page<Categories> getAllCategories(int offset,int pagesize);
-     boolean saveCat(Categories cat);
-	 Categories viewcbyid(int id);
-	 boolean updateCategory(int id, Categories updatedCategory);
-	 boolean delcatbyid(int id);
 
+	Page<categories> getAllCategories(int offset, int pagesize);
+
+	boolean saveCat(categories cat);
+
+	categories viewcbyid(int id);
+
+	boolean updateCategory(int id, categories updatedCategory);
+
+	boolean delcatbyid(int id);
 
 }

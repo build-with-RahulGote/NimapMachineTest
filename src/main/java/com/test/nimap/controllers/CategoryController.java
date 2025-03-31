@@ -13,63 +13,55 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.test.nimap.models.Categories;
-
+import com.test.nimap.models.categories;
 import com.test.nimap.services.CategoryServices;
 
-@RestController //set as Controller
-@RequestMapping("/api/categories")//API mapping
+@RestController // set as Controller
+@RequestMapping("/api/categories") // API mapping
 public class CategoryController {
 	@Autowired
 	public CategoryServices catservice;
-	
-	
-	//Find All Categories with Pagination
+
+	// Find All Categories with Pagination
 	@GetMapping
-	public ResponseEntity<Page<Categories>>getAllCategories(@RequestParam(defaultValue = "0")int page,@RequestParam(defaultValue = "5")int size)
-	{
-		Page<Categories>getcat=catservice.getAllCategories(page, size);
+	public ResponseEntity<Page<categories>> getAllCategories(@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "5") int size) {
+		Page<categories> getcat = catservice.getAllCategories(page, size);
 		return ResponseEntity.ok(getcat);
-		
+
 	}
-	
-	//Add New Category
+
+	// Add New Category
 	@PostMapping
-	public String AddCategory(@RequestBody Categories c) {
-			
-		boolean b =catservice.saveCat(c);
-		if(b) {
+	public String AddCategory(@RequestBody categories c) {
+
+		boolean b = catservice.saveCat(c);
+		if (b) {
 			return "Category Added Successfully";
-		}
-		else {
+		} else {
 			return "some problem is there.....";
 		}
 	}
-	
-	//Find Category By Id
+
+	// Find Category By Id
 	@GetMapping("/{id}")
-	public ResponseEntity<Categories>getCategoriesById(@PathVariable int id) {
-		Categories c1=catservice.viewcbyid(id);
+	public ResponseEntity<categories> getCategoriesById(@PathVariable int id) {
+		categories c1 = catservice.viewcbyid(id);
 		return ResponseEntity.ok(c1);
 	}
-	
-	
-	//update Category By id
+
+	// update Category By id
 	@PutMapping("/{id}")
-	public ResponseEntity<String>updateCatgoery(@PathVariable int id,@RequestBody Categories updatecat)
-	{
-		boolean update=catservice.updateCategory(id, updatecat);
-		if(update)
-		{
+	public ResponseEntity<String> updateCatgoery(@PathVariable int id, @RequestBody categories updatecat) {
+		boolean update = catservice.updateCategory(id, updatecat);
+		if (update) {
 			return ResponseEntity.ok("Category updated successfully");
-		}
-		else
-		{
+		} else {
 			return ResponseEntity.status(404).body("Category not found");
 		}
 	}
-	
-	//Delete Category By id
+
+	// Delete Category By id
 	@DeleteMapping(value = "/{id}")
 	public String deleteCatById(@PathVariable int id) {
 		boolean b = catservice.delcatbyid(id);
@@ -78,8 +70,6 @@ public class CategoryController {
 		} else {
 			return "Record not found";
 		}
-		
-		
 
-}
+	}
 }

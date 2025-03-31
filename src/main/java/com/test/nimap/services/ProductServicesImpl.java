@@ -7,30 +7,29 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.test.nimap.models.Categories;
 import com.test.nimap.models.Products;
-
+import com.test.nimap.models.categories;
 import com.test.nimap.repository.ProductRepository;
 
 @Service
 public class ProductServicesImpl implements ProductServices {
 
 	@Autowired
-	private ProductRepository prepo;  
+	private ProductRepository prepo;
 
 	@Autowired
-	CategoryServices categoryServices;  //category service object
+	CategoryServices categoryServices; // category service object
 
-	//find all products with pagination
+	// find all products with pagination
 	@Override
-	//provide page and page size
+	// provide page and page size
 	public Page<Products> getAllProducts(int offset, int pagesize) {
 
 		Page<Products> products = prepo.findAll(PageRequest.of(offset, pagesize));
 		return products;
 	}
 
-	//get product by id
+	// get product by id
 	@Override
 	public Products viewpbyid(int id) {
 
@@ -45,32 +44,29 @@ public class ProductServicesImpl implements ProductServices {
 		}
 	}
 
-	//update product by id
+	// update product by id
 	@Override
 	public Products updateproduct(int id, Products prod) {
-		Optional<Products>opprod=prepo.findById(id);
-		if(opprod.isPresent())
-		{
-			Products cat=opprod.get();
+		Optional<Products> opprod = prepo.findById(id);
+		if (opprod.isPresent()) {
+			Products cat = opprod.get();
 			cat.setPname(prod.getPname());
 			cat.setPrice(prod.getPrice());
-			
-			int newcid=prod.getCategory().getCid();
-			Categories categories=categoryServices.viewcbyid(newcid);
-			if(categories!=null)
-			{
-				cat.setCategory(categories);
+
+			int newcid = prod.getCategory().getCid();
+			categories categorie = categoryServices.viewcbyid(newcid);
+			if (categorie != null) {
+				cat.setCategory(categorie);
 			}
 			prepo.save(cat);
 			return cat;
 		}
-	
+
 		return null;
 
-		
 	}
 
-	//delete product by id
+	// delete product by id
 	@Override
 	public boolean DelProdById(int pid) {
 		Optional<Products> oc = prepo.findById(pid);
@@ -82,21 +78,22 @@ public class ProductServicesImpl implements ProductServices {
 			return false;
 		}
 	}
+	
+	  @Override public Products savepro(Products p) {
+	  
+	  int categoryId = p.getCategory().getCid(); 
+	  categories categorie =
+	  categoryServices.viewcbyid(categoryId);
+	  
+	  if (categorie == null) return null;
+	  
+	  p.setCategory(categorie);
+	  
+	  Products sp = prepo.save(p); return sp ;
+	  
+	  }
+	 
 
-	@Override
-	public Products savepro(Products p) {
-
-		int categoryId = p.getCategory().getCid();
-		Categories categorie = categoryServices.viewcbyid(categoryId);
-
-		if (categorie == null)
-			return null;
-
-		p.setCategory(categorie);
-
-		Products sp = prepo.save(p);
-		return sp ;
-
-	}
+	
 
 }
